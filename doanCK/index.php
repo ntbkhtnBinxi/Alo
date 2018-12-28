@@ -128,7 +128,7 @@ if($data)
 								<img width="500" height="500" src="images/<?php echo $baiviet->picture ?>" class="card-img-top" alt="...">
 							<?php endif ?>
 
-							<form action="index.php" method="POST" >
+							<form action="index.php" method="POST" style="margin-top: 10px" >
 								<div class="form-row">
 									<div class="col">
 										<input type="text" class="form-control" name= "commentText" placeholder="Comment here...">
