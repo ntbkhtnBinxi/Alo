@@ -17,6 +17,10 @@
       <li class="nav-item">
         <a class="nav-link" href="Dangxuat.php">Đăng xuất</a>
       </li>
-      
+    </ul>
+      <form class="form-inline my-2 my-lg-0" action="Find.php" method="POST">
+        <input class="form-control mr-sm-2" type="search" name = "keyFindPost" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" name= "findPost" type="submit">Search</button>
+      </form>
     </div>
   </nav>

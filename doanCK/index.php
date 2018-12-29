@@ -97,7 +97,7 @@ if($data)
 									<OPTION Value="1">Bạn bè</OPTION>
 									<OPTION Value="2">Chỉ mình tôi</OPTION>
 								</SELECT></p> 
-								<button type="submit" class="btn btn-primary" name="post">Save changes</button>
+								<button style="position:relative;right:-21rem ;" type="submit" class="btn btn-primary" name="post">Save changes</button>
 							</form>
 						</div>
 					</div>
@@ -125,7 +125,16 @@ if($data)
 						<div class="card-body">
 							<h5 class="card-title"><?php echo $baiviet->content; ?></h5>
 							<?php if (($baiviet->picture != null)): ?>
-								<img width="500" height="500" src="images/<?php echo $baiviet->picture ?>" class="card-img-top" alt="...">
+								<img  style=" width: 40rem;
+								height: 30rem;
+								display: inline-block;
+								padding: 5px;
+								margin-left: 20px;
+								vertical-align:top; 
+								background-image: none;
+								background-repeat: no-repeat;
+								background-position: center center;
+								background-size: cover;" src="images/<?php echo $baiviet->picture ?>" class="card-img-top" alt="...">
 							<?php endif ?>
 
 							<form action="index.php" method="POST" style="margin-top: 10px" >
@@ -146,10 +155,10 @@ if($data)
 									<?php 
 									$usercomment = $modal->SelectUserById($comment->idUserComment);
 									?>
-									<div class="card">
+									<div class="card" style="margin-top: 5px">
 										<div class="card-body">
-											<p><b><?php echo $usercomment->fullname; ?></b></p>
-											<p><?php echo $comment->CommentText ?></p>
+											<p><?php echo $usercomment->fullname; ?></p>
+											<small><?php echo $comment->CommentText ?></small>
 										</div>
 									</div>
 									
@@ -169,7 +178,16 @@ if($data)
 		</div>
 		<div class="col-4">
 			<div class="card">
-				<img src="avatar/<?php if($user->avatar == null){
+				<img style=" width: 10rem;
+				height: 10rem;
+				display: inline-block;
+				padding: 5px;
+				margin-left: 6rem;
+				vertical-align:top; 
+				background-image: none;
+				background-repeat: no-repeat;
+				background-position: center center;
+				background-size: cover;"src="avatar/<?php if($user->avatar == null){
 					echo "default.jpg";
 					} else 
 					{

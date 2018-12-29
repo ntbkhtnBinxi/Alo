@@ -31,6 +31,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 		$user2id = $_POST['notaccept'];
 		$modal->RemoveReletion($user1->id,$user2id);
 	}
+	if(isset($_POST['DeleteFriend']))
+	{
+		$template = 1;
+		$user1 = $modal->SelectUserById($_SESSION['idUser']);
+		$user2id = $_POST['DeleteFriend'];
+		$modal->RemoveReletion($user1->id,$user2id);
+	}
 	if(isset($_POST['profileSendRequest'])){
 		$template = 3;
 		$profileUser = $modal->SelectUserById($_POST['profileSendRequest']);
@@ -38,6 +45,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 	if(isset($_POST['profileBeSendRequest'])){
 		$template = 4;
 		$profileUser = $modal->SelectUserById($_POST['profileBeSendRequest']);
+	}
+	if(isset($_POST['profileFriend'])){
+		$template = 5;
+		$profileUser = $modal->SelectUserById($_POST['profileFriend']);
 	}
 	if(isset($_POST['profile'])){
 		$template = 2;
@@ -72,6 +83,7 @@ $currentuser = $modal->SelectUserById($_SESSION['idUser']);
 $listUser = $modal->LoadAllUser($currentuser->id);
 $listRequest = $modal->SelectRequestAddFriend($currentuser->id);
 $listSendRequest = $modal->SelectSendRequestAddFriend($currentuser->id);
+$listFriend = $modal->SelectAllFriends($currentuser->id);
 ?>
 <?php require 'header.php'; ?>
 
@@ -117,43 +129,57 @@ $listSendRequest = $modal->SelectSendRequestAddFriend($currentuser->id);
 			<div class="col-4">
 				<div class="card">
 					<div class="card-body">
-						<center>
-							Tiện ích
-						</center>
-						<br>
-						<form style="margin-bottom: 10px" class="form-inline my-3 my-lg-3" action="info.php" method="POST">
+						<form style="margin-left: 0.5rem" style="margin-bottom: 10px" class="form-inline my-3 my-lg-3" action="Find.php" method="POST">
 							<input class="form-control mr-sm-2" type="search" placeholder="Search" name="keysreach" aria-label="Search">
-							<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+							<button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="sreachF">Search</button>
 						</form>
 
 
 						 <!--Đề xuất kết bạn-->
 						<?php if ($template == 1): ?>
-							<div class="card" style="margin-top: 10px">
+							<div class="card" style="margin-top: 10px;">
 								<div class="card-block" style="margin-left: 10px; margin-bottom: 10px; padding-bottom: 5px;" >
 									<center>
 										<h4 style="padding-top: 5px;padding-bottom: 5px;" class="card-title">Đề cử kết bạn</h4>
 									</center>
 									<?php foreach ($listUser as $list): ?>
 										<?php $userP = $modal->SelectUserById($list->id) ?>
-										<form style="padding-top: 5px" method="POST" action="info.php"><button action="info.php" class="btn btn-outline-primary" name = "profile" value="<?php echo $userP->id ?>" ><?php echo $userP->fullname ?></button></form>
+										<form style="padding-top: 5px" method="POST" action="info.php"><button style="margin-left: 1rem" action="info.php" class="
+											btn btn-outline-primary" name = "profile" value="<?php echo $userP->id ?>" ><?php echo $userP->fullname ?></button></form>
 									<?php endforeach ?>
 									
 								</div>
 							</div>
-
+							
+							<!--Danh sách bạn bè-->
+							<?php if (!empty($listFriend)): ?>
+								<div class="card" style="margin-top: 10px;">
+									<div class="card-block" style="margin-left: 10px; margin-bottom: 10px" >
+										<center>
+											<h4 style="padding-top: 5px"  style="padding-bottom: -2px" class="card-title">Danh sách bạn bè</h4>
+										</center>
+										<?php foreach ($listFriend as $listF): ?>
+										<?php $userF = $modal->SelectUserById($listF->user1Id) ?>
+										<form style="padding-top: 5px" method="POST" action="info.php">
+											<button style="margin-left: 1rem" action="info.php" class="btn btn-outline-primary" name = "profileFriend" value="<?php echo $userF->id ?>" ><?php echo $userF->fullname ?>
+											</button>
+										</form>
+									<?php endforeach ?>
+									</div>
+								</div>
+							<?php endif ?>
 
 							 <!--Danh sách Lời mời kết bạn-->
 							<?php if (!empty($listRequest)): ?>
-								<div class="card">
+								<div class="card" style="margin-top: 10px;">
 									<div class="card-block" style="margin-left: 10px; margin-bottom: 10px" >
 										<center>
 											<h4 style="padding-top: 5px"  style="padding-bottom: -2px" class="card-title">Lời mời kết bạn</h4>
 										</center>
 										<?php foreach ($listRequest as $listR): ?>
-										<?php $userR = $modal->SelectUserById($listR->user2Id) ?>
+										<?php $userR = $modal->SelectUserById($listR->user1Id) ?>
 										<form style="padding-top: 5px" method="POST" action="info.php">
-											<button action="info.php" class="btn btn-outline-primary" name = "profileSendRequest" value="<?php echo $userR->id ?>" ><?php echo $userR->fullname ?>
+											<button style="margin-left: 1rem" action="info.php" class="btn btn-outline-primary" name = "profileSendRequest" value="<?php echo $userR->id ?>" ><?php echo $userR->fullname ?>
 											</button>
 										</form>
 									<?php endforeach ?>
@@ -163,7 +189,7 @@ $listSendRequest = $modal->SelectSendRequestAddFriend($currentuser->id);
 
 							 <!--Danh sách được gửi lời mời-->
 							<?php if (!empty($listSendRequest)): ?>
-								<div class="card">
+								<div class="card" style="margin-top: 10px;">
 									<div class="card-block" style="margin-left: 10px; margin-bottom: 10px" >
 										<center>
 											<h4 style="padding-top: 5px"  style="padding-bottom: -2px" class="card-title">Bạn đang gửi lời mời kết bạn tới</h4>
@@ -171,7 +197,7 @@ $listSendRequest = $modal->SelectSendRequestAddFriend($currentuser->id);
 										<?php foreach ($listSendRequest as $listS): ?>
 										<?php $userS = $modal->SelectUserById($listS->user2Id) ?>
 										<form style="padding-top: 5px" method="POST" action="info.php">
-											<button action="info.php" class="btn btn-outline-primary" name = "profileBeSendRequest" value="<?php echo $userS->id ?>" ><?php echo $userS->fullname ?>
+											<button action="info.php" style="margin-left: 1rem" class="btn btn-outline-primary" name = "profileBeSendRequest" value="<?php echo $userS->id ?>" ><?php echo $userS->fullname ?>
 											</button>
 										</form>
 									<?php endforeach ?>
@@ -191,6 +217,22 @@ $listSendRequest = $modal->SelectSendRequestAddFriend($currentuser->id);
 										<p class="card-text">Không phải là bạn của bạn</p>
 										<form action="info.php" method="POST">
 											<button class="btn btn-outline-primary" name ="sendRequest" style="submit" value="<?php echo $profileUser->id ?>">Gửi lời mời kết bạn</button>
+										</form>
+									</div>
+								</div>
+							</center>
+						<?php endif ?>
+
+						<!--Profile bạn -->
+						<?php if ($template == 5): ?>
+							<center>
+								<div class="card" style="width: 18rem;">
+									<img class="card-img-top" src="avatar/<?php echo $profileUser->avatar ?>" alt="Card image cap">
+									<div class="card-body">
+										<h5 class="card-title"><?php echo $profileUser->fullname ?></h5>
+										<p class="card-text">Đang là bạn bè với bạn</p>
+										<form action="info.php" method="POST">
+											<button class="btn btn-outline-primary" name ="DeleteFriend" style="submit" value="<?php echo $profileUser->id ?>">Xóa bạn bè</button>
 										</form>
 									</div>
 								</div>

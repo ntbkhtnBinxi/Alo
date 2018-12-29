@@ -19,7 +19,7 @@
 				$_SESSION['idUser'] = $user->id;
 				header('Location: index.php');	
 			}
-			if(!$user)
+			else
 			{
 				$error = "Đăng kí thất bại";
 			}
